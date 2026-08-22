@@ -28,5 +28,5 @@ if [[ -d "$SUPPORT_DIR" ]]; then
   mv "$SUPPORT_DIR" "$TRASH_DIR/"
 fi
 
-echo "已卸载；应用与运行文件已移到：$TRASH_DIR"
-echo "声音配置保留在：$CODEX_HOME/notification-settings.json"
+echo "已卸载；应用与运行文件已移到 / Uninstalled; app and runtime files moved to: $TRASH_DIR"
+echo "声音配置保留在 / Sound settings preserved at: $CODEX_HOME/notification-settings.json"

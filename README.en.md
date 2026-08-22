@@ -32,7 +32,13 @@ An unofficial macOS utility for configuring Codex notification sounds. It maps d
 - Building from source requires Xcode Command Line Tools and Swift 6.
 - `terminal-notifier` is optional. Sounds still play without it, but the utility will not add its own notification banner.
 
-## Install from source
+## Install
+
+### Release package (recommended)
+
+Download the latest `Codex-Notification-Settings-<version>-macos.zip` from [GitHub Releases](https://github.com/cyberxz2077/codex-notification-settings/releases), unzip it, and double-click `Install.command`. See [INSTALL.md](INSTALL.md) for checksum verification and uninstall instructions.
+
+### Install from source
 
 ```bash
 git clone https://github.com/cyberxz2077/codex-notification-settings.git

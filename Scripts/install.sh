@@ -26,7 +26,7 @@ if [[ ! -d "$APP_SOURCE" && -x "$ROOT/Scripts/build-app.sh" ]]; then
   "$ROOT/Scripts/build-app.sh" >/dev/null
 fi
 if [[ ! -d "$APP_SOURCE" ]]; then
-  echo "找不到应用包：$APP_SOURCE" >&2
+  echo "找不到应用包 / App bundle not found: $APP_SOURCE" >&2
   exit 1
 fi
 
@@ -51,5 +51,5 @@ fi
 if [[ "${CODEX_NOTIFY_SKIP_OPEN:-0}" != "1" ]]; then
   open "$APP_TARGET"
 fi
-echo "安装完成：$APP_TARGET"
-echo "请重新打开 Codex，使 notify 配置稳定生效。"
+echo "安装完成 / Installed: $APP_TARGET"
+echo "请重新打开 Codex，使 notify 配置稳定生效。 / Restart Codex to activate the notify configuration."

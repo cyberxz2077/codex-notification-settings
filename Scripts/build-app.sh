@@ -6,6 +6,8 @@ APP_NAME="Codex Notification Settings"
 EXECUTABLE="CodexNotificationSettings"
 APP="$ROOT/dist/$APP_NAME.app"
 BUILD_DIR="$ROOT/.build-universal"
+VERSION="${1:-$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$ROOT/Resources/Info.plist")}"
+SIGN_IDENTITY="${CODE_SIGN_IDENTITY:--}"
 
 cd "$ROOT"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources" "$BUILD_DIR"
@@ -24,6 +26,11 @@ lipo -create \
   -output "$APP/Contents/MacOS/$EXECUTABLE"
 cp "Resources/Info.plist" "$APP/Contents/Info.plist"
 cp "Resources/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"
-codesign --force --deep --sign - "$APP"
+/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION" "$APP/Contents/Info.plist"
+if [[ "$SIGN_IDENTITY" == "-" ]]; then
+  codesign --force --deep --sign - "$APP"
+else
+  codesign --force --deep --options runtime --timestamp --sign "$SIGN_IDENTITY" "$APP"
+fi
 
 echo "$APP"

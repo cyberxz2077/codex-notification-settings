@@ -384,7 +384,9 @@ enum NotificationEngine {
         }
         var arrayStart = NSMaxRange(match.range)
         while arrayStart < source.length && source.character(at: arrayStart) != 91 { arrayStart += 1 }
-        guard arrayStart < source.length else { throw EngineError.invalidNotify("notify 不是数组") }
+        guard arrayStart < source.length else {
+            throw EngineError.invalidNotify(L10n.text("notify 不是数组", "notify is not an array"))
+        }
 
         var depth = 0
         var quote: unichar = 0
@@ -414,7 +416,9 @@ enum NotificationEngine {
                 }
             }
         }
-        guard arrayEnd > arrayStart else { throw EngineError.invalidNotify("notify 数组未闭合") }
+        guard arrayEnd > arrayStart else {
+            throw EngineError.invalidNotify(L10n.text("notify 数组未闭合", "notify array is not closed"))
+        }
         let command = try parseStringArray(source.substring(with: NSRange(location: arrayStart, length: arrayEnd - arrayStart)))
         var lineEnd = arrayEnd
         while lineEnd < source.length && source.character(at: lineEnd) != 10 { lineEnd += 1 }
@@ -462,7 +466,7 @@ enum NotificationEngine {
                     }
                 } else {
                     guard let scalar = UnicodeScalar(current) else {
-                        throw EngineError.invalidNotify("notify 包含无效字符")
+                        throw EngineError.invalidNotify(L10n.text("notify 包含无效字符", "notify contains an invalid character"))
                     }
                     value.append(Character(scalar))
                 }
@@ -506,14 +510,17 @@ enum NotificationEngine {
         let current = try findNotify(in: text)?.command ?? []
         let command = [executablePath, "--notify"]
         if current == command {
-            print("Codex notify 已配置。")
+            print(L10n.text("Codex notify 已配置。", "Codex notify is already configured."))
             return
         }
         let state = try JSONEncoder().encode(InstallState(previousNotify: current))
         try atomicWrite(state, to: stateURL)
         let updated = try replaceNotify(in: text, with: command)
         try atomicWrite(Data(updated.utf8), to: configURL)
-        print("已配置 Codex notify，并保留原有通知命令。")
+        print(L10n.text(
+            "已配置 Codex notify，并保留原有通知命令。",
+            "Configured Codex notify and preserved the previous notification command."
+        ))
     }
 
     private static func configureUninstall(
@@ -524,7 +531,10 @@ enum NotificationEngine {
         let text = (try? String(contentsOf: configURL, encoding: .utf8)) ?? ""
         let command = [executablePath, "--notify"]
         guard try findNotify(in: text)?.command == command else {
-            print("当前 Codex notify 不属于本应用，未修改配置。")
+            print(L10n.text(
+                "当前 Codex notify 不属于本应用，未修改配置。",
+                "The current Codex notify command does not belong to this app; configuration was not changed."
+            ))
             return
         }
         let decodedState: InstallState?
@@ -536,7 +546,10 @@ enum NotificationEngine {
         let previous = decodedState?.previousNotify ?? []
         let updated = try replaceNotify(in: text, with: previous.isEmpty ? nil : previous)
         try atomicWrite(Data(updated.utf8), to: configURL)
-        print("已恢复安装前的 Codex notify 配置。")
+        print(L10n.text(
+            "已恢复安装前的 Codex notify 配置。",
+            "Restored the Codex notify configuration from before installation."
+        ))
     }
 
     private static func forwardPreviousNotification(_ eventArguments: [String]) {

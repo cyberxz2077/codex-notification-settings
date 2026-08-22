@@ -34,9 +34,14 @@
 
 ## 安装
 
-当前源码版：
+### 发布包（推荐）
+
+从 [GitHub Releases](https://github.com/cyberxz2077/codex-notification-settings/releases) 下载最新版 `Codex-Notification-Settings-<version>-macos.zip`，解压后双击 `Install.command`。详细步骤见 [INSTALL.md](INSTALL.md)。
+
+### 从源码安装
 
 ```bash
+git clone https://github.com/cyberxz2077/codex-notification-settings.git
 cd codex-notification-settings
 make test
 ./Scripts/install.sh
