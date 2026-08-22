@@ -1,0 +1,7 @@
+.DS_Store
+.build/
+.build-universal/
+dist/
+*.log
+__pycache__/
+*.pyc

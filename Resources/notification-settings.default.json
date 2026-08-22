@@ -1,0 +1,35 @@
+{
+  "enabled": true,
+  "states": {
+    "stage": {
+      "enabled": true,
+      "sound": "Pop",
+      "volume": 0.25
+    },
+    "complete": {
+      "enabled": true,
+      "sound": "Hero",
+      "volume": 0.5
+    },
+    "needs_input": {
+      "enabled": true,
+      "sound": "Ping",
+      "volume": 0.45
+    },
+    "failed": {
+      "enabled": true,
+      "sound": "Basso",
+      "volume": 0.4
+    },
+    "network": {
+      "enabled": true,
+      "sound": "Submarine",
+      "volume": 0.3
+    },
+    "voice": {
+      "enabled": false,
+      "sound": "Glass",
+      "volume": 0.2
+    }
+  }
+}
