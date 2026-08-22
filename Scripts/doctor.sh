@@ -12,10 +12,15 @@ echo "Codex config: $CODEX_HOME/config.toml"
 [[ -d "$APP" ]] && echo "App: installed" || echo "App: missing"
 [[ -x "$SUPPORT_DIR/CodexNotificationEngine" ]] && echo "Engine: installed" || echo "Engine: missing"
 [[ -f "$CODEX_HOME/notification-settings.json" ]] && echo "Settings: present" || echo "Settings: missing"
-[[ -f "$PLIST" ]] && echo "Experimental stage watcher: configured" || echo "Experimental stage watcher: not configured"
-launchctl print "gui/$UID/com.codexnotifications.phase-watcher" >/dev/null 2>&1 \
-  && echo "Experimental stage watcher: running" \
-  || echo "Experimental stage watcher: stopped"
+if [[ -f "$PLIST" ]]; then
+  echo "Experimental stage watcher: configured"
+  launchctl print "gui/$UID/com.codexnotifications.phase-watcher" >/dev/null 2>&1 \
+    && echo "Experimental stage watcher: running" \
+    || echo "Experimental stage watcher: stopped"
+else
+  echo "Experimental stage watcher: not configured"
+  echo "Experimental stage watcher: not installed"
+fi
 command -v terminal-notifier >/dev/null 2>&1 \
   && echo "Banner helper: $(command -v terminal-notifier)" \
   || echo "Banner helper: not installed (sounds still work)"
