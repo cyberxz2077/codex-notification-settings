@@ -11,23 +11,23 @@ enum NotificationCategory: String, CaseIterable {
 
     var title: String {
         switch self {
-        case .stage: "Codex 进展"
+        case .stage: L10n.text("Codex 进展", "Codex progress")
         case .complete: "Codex"
-        case .needsInput: "Codex 需要你"
-        case .failed: "Codex 未完成"
-        case .network: "Codex 网络异常"
-        case .voice: "Codex 语音"
+        case .needsInput: L10n.text("Codex 需要你", "Codex needs you")
+        case .failed: L10n.text("Codex 未完成", "Codex task failed")
+        case .network: L10n.text("Codex 网络异常", "Codex network issue")
+        case .voice: L10n.text("Codex 语音", "Codex voice")
         }
     }
 
     var message: String {
         switch self {
-        case .stage: "阶段成果已更新"
-        case .complete: "任务完成，可以查看"
-        case .needsInput: "任务暂停，等待你的回答或授权"
-        case .failed: "任务遇到问题，请检查"
-        case .network: "连接异常或正在重连"
-        case .voice: "实时语音回合已结束"
+        case .stage: L10n.text("阶段成果已更新", "Progress update available")
+        case .complete: L10n.text("任务完成，可以查看", "Task complete and ready to review")
+        case .needsInput: L10n.text("任务暂停，等待你的回答或授权", "Task paused for your answer or approval")
+        case .failed: L10n.text("任务遇到问题，请检查", "The task ran into a problem")
+        case .network: L10n.text("连接异常或正在重连", "Connection lost or reconnecting")
+        case .voice: L10n.text("实时语音回合已结束", "Realtime voice turn ended")
         }
     }
 }

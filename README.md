@@ -1,5 +1,7 @@
 # Codex Notification Settings
 
+[中文](README.md) · [English](README.en.md)
+
 一个面向 macOS 的非官方 Codex 提示音设置工具。它把 Codex 的通知分成不同状态，允许分别开关、选择系统声音和调整音量；设置 App 可以随用随开，退出后后台通知仍继续工作。
 
 <img src="Resources/app-icon-source.png" width="160" alt="Codex Notification Settings app icon">
@@ -20,6 +22,7 @@
 - 保留并转发安装前已有的 Codex `notify` 命令。
 - 阶段监听器独立运行，设置 App 不需要常驻 Dock。
 - 同一任务回合会限频去重，避免重复响铃。
+- 跟随 macOS 首选语言；中文系统显示中文，其他语言默认显示英文。
 
 ## 系统要求
 

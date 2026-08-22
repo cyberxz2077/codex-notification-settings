@@ -50,7 +50,7 @@ struct StateMetadata: Identifiable {
 @MainActor
 final class SettingsStore: ObservableObject {
     @Published private(set) var settings = NotificationSettings.defaults
-    @Published private(set) var status = "更改即时生效"
+    @Published private(set) var status = L10n.text("更改即时生效", "Changes take effect immediately")
     private var previewTask: Process?
 
     let configURL = FileManager.default.homeDirectoryForCurrentUser
@@ -75,17 +75,17 @@ final class SettingsStore: ObservableObject {
     func load() {
         guard FileManager.default.fileExists(atPath: configURL.path) else {
             settings = .defaults
-            save(statusText: "已创建默认配置")
+            save(statusText: L10n.text("已创建默认配置", "Created default configuration"))
             return
         }
         do {
             let data = try Data(contentsOf: configURL)
             let decoded = try JSONDecoder().decode(NotificationSettings.self, from: data)
             settings = normalized(decoded)
-            status = "更改即时生效"
+            status = L10n.text("更改即时生效", "Changes take effect immediately")
         } catch {
             settings = .defaults
-            status = "配置文件无效，尚未覆盖"
+            status = L10n.text("配置文件无效，尚未覆盖", "Invalid configuration; the file was not overwritten")
         }
     }
 
@@ -116,14 +116,14 @@ final class SettingsStore: ObservableObject {
 
     func reset() {
         settings = .defaults
-        save(statusText: "已恢复默认")
+        save(statusText: L10n.text("已恢复默认", "Restored defaults"))
     }
 
     func preview(_ id: String) {
         let state = state(for: id)
         let soundURL = URL(fileURLWithPath: "/System/Library/Sounds/\(state.sound).aiff")
         guard FileManager.default.fileExists(atPath: soundURL.path) else {
-            status = "声音文件不可用"
+            status = L10n.text("声音文件不可用", "Sound file is unavailable")
             return
         }
         if let previewTask, previewTask.isRunning {
@@ -135,9 +135,9 @@ final class SettingsStore: ObservableObject {
         do {
             try task.run()
             previewTask = task
-            status = "正在试听：\(state.sound)"
+            status = L10n.text("正在试听：\(state.sound)", "Previewing: \(state.sound)")
         } catch {
-            status = "试听失败"
+            status = L10n.text("试听失败", "Preview failed")
         }
     }
 
@@ -159,7 +159,7 @@ final class SettingsStore: ObservableObject {
         return result
     }
 
-    private func save(statusText: String = "已保存") {
+    private func save(statusText: String? = nil) {
         do {
             let directory = configURL.deletingLastPathComponent()
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -167,9 +167,9 @@ final class SettingsStore: ObservableObject {
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
             let data = try encoder.encode(settings)
             try data.write(to: configURL, options: .atomic)
-            status = statusText
+            status = statusText ?? L10n.text("已保存", "Saved")
         } catch {
-            status = "保存失败"
+            status = L10n.text("保存失败", "Save failed")
         }
     }
 }
@@ -192,7 +192,7 @@ struct StateRow: View {
                     Text(metadata.title)
                         .font(.system(size: 14, weight: .semibold))
                     if let experimentalNote = metadata.experimentalNote {
-                        Text("实验性")
+                        Text(L10n.text("实验性", "Experimental"))
                             .font(.system(size: 8, weight: .medium))
                             .foregroundStyle(.orange)
                             .help(experimentalNote)
@@ -210,9 +210,11 @@ struct StateRow: View {
             ))
             .labelsHidden()
             .toggleStyle(.switch)
-            .help(state.enabled ? "关闭此状态的提示音" : "开启此状态的提示音")
+            .help(state.enabled
+                ? L10n.text("关闭此状态的提示音", "Disable sound for this state")
+                : L10n.text("开启此状态的提示音", "Enable sound for this state"))
 
-            Picker("声音", selection: Binding(
+            Picker(L10n.text("声音", "Sound"), selection: Binding(
                 get: { state.sound },
                 set: { value in store.selectSound(value, for: metadata.id) }
             )) {
@@ -223,7 +225,7 @@ struct StateRow: View {
             .labelsHidden()
             .frame(width: 120)
             .disabled(!state.enabled)
-            .help("选择声音；切换后自动试听")
+            .help(L10n.text("选择声音；切换后自动试听", "Choose a sound; changes preview automatically"))
 
             Slider(value: Binding(
                 get: { state.volume },
@@ -231,7 +233,7 @@ struct StateRow: View {
             ), in: 0...1, step: 0.05)
             .frame(width: 130)
             .disabled(!state.enabled)
-            .help("调整音量")
+            .help(L10n.text("调整音量", "Adjust volume"))
 
             Text("\(Int((state.volume * 100).rounded()))%")
                 .font(.system(size: 12, design: .monospaced))
@@ -245,8 +247,8 @@ struct StateRow: View {
                     .frame(width: 18, height: 18)
             }
             .buttonStyle(.borderless)
-            .help("试听 \(metadata.title)")
-            .accessibilityLabel("试听 \(metadata.title)")
+            .help(L10n.text("试听 \(metadata.title)", "Preview \(metadata.title)"))
+            .accessibilityLabel(L10n.text("试听 \(metadata.title)", "Preview \(metadata.title)"))
         }
         .frame(height: 54)
         .opacity(store.settings.enabled ? 1 : 0.55)
@@ -256,32 +258,32 @@ struct StateRow: View {
 struct SettingsView: View {
     @ObservedObject var store: SettingsStore
 
-    private let rows = [
+    private var rows: [StateMetadata] { [
         StateMetadata(
             id: "stage",
-            title: "阶段成果",
-            subtitle: "完成一段实际工作后的进度更新",
+            title: L10n.text("阶段成果", "Progress update"),
+            subtitle: L10n.text("完成一段实际工作后的进度更新", "A progress update after meaningful work"),
             icon: "circle.dotted",
-            experimentalNote: "实验性：Codex 更新后可能需适配"
+            experimentalNote: L10n.text("实验性：Codex 更新后可能需适配", "Experimental: Codex updates may require changes")
         ),
-        StateMetadata(id: "complete", title: "最终输出", subtitle: "任务完成并可查看", icon: "checkmark.circle.fill"),
-        StateMetadata(id: "needs_input", title: "需要你", subtitle: "等待回答或授权", icon: "person.crop.circle.badge.questionmark"),
-        StateMetadata(id: "failed", title: "任务失败", subtitle: "执行未能完成", icon: "xmark.octagon.fill"),
+        StateMetadata(id: "complete", title: L10n.text("最终输出", "Final response"), subtitle: L10n.text("任务完成并可查看", "The task is ready to review"), icon: "checkmark.circle.fill"),
+        StateMetadata(id: "needs_input", title: L10n.text("需要你", "Needs you"), subtitle: L10n.text("等待回答或授权", "Waiting for an answer or approval"), icon: "person.crop.circle.badge.questionmark"),
+        StateMetadata(id: "failed", title: L10n.text("任务失败", "Task failed"), subtitle: L10n.text("执行未能完成", "The task could not be completed"), icon: "xmark.octagon.fill"),
         StateMetadata(
             id: "network",
-            title: "网络异常",
-            subtitle: "断线或正在重连",
+            title: L10n.text("网络异常", "Network issue"),
+            subtitle: L10n.text("断线或正在重连", "Disconnected or reconnecting"),
             icon: "wifi.exclamationmark",
-            experimentalNote: "实验性：可能漏报部分网络状态"
+            experimentalNote: L10n.text("实验性：可能漏报部分网络状态", "Experimental: some network states may be missed")
         ),
         StateMetadata(
             id: "voice",
-            title: "实时语音",
-            subtitle: "语音回答结束",
+            title: L10n.text("实时语音", "Realtime voice"),
+            subtitle: L10n.text("语音回答结束", "A voice response has ended"),
             icon: "waveform",
-            experimentalNote: "实验性：内部语音状态可能变化"
+            experimentalNote: L10n.text("实验性：内部语音状态可能变化", "Experimental: internal voice states may change")
         ),
-    ]
+    ] }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -292,16 +294,16 @@ struct SettingsView: View {
                     .frame(width: 38, height: 38)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Codex 提示音")
+                    Text(L10n.text("Codex 提示音", "Codex Notification Sounds"))
                         .font(.system(size: 20, weight: .bold))
-                    Text("状态声音与音量")
+                    Text(L10n.text("状态声音与音量", "Sounds and volume by state"))
                         .font(.system(size: 12))
                         .foregroundStyle(.secondary)
                 }
 
                 Spacer()
 
-                Toggle("启用提示音", isOn: Binding(
+                Toggle(L10n.text("启用提示音", "Enable sounds"), isOn: Binding(
                     get: { store.settings.enabled },
                     set: store.setMasterEnabled
                 ))
@@ -336,10 +338,10 @@ struct SettingsView: View {
                 } label: {
                     Image(systemName: "folder")
                 }
-                .help("在访达中显示配置")
-                .accessibilityLabel("在访达中显示配置")
+                .help(L10n.text("在访达中显示配置", "Show configuration in Finder"))
+                .accessibilityLabel(L10n.text("在访达中显示配置", "Show configuration in Finder"))
 
-                Button("恢复默认") {
+                Button(L10n.text("恢复默认", "Restore Defaults")) {
                     store.reset()
                 }
             }
@@ -362,19 +364,19 @@ struct CodexNotificationSettingsApp: App {
     @StateObject private var store = SettingsStore()
 
     var body: some Scene {
-        Window("Codex 提示音", id: "notification-settings") {
+        Window(L10n.text("Codex 提示音", "Codex Notification Sounds"), id: "notification-settings") {
             SettingsView(store: store)
         }
         .defaultPosition(.center)
         .windowResizability(.contentSize)
         .commands {
             CommandGroup(replacing: .appInfo) {
-                Button("关于 Codex 提示音") {
+                Button(L10n.text("关于 Codex 提示音", "About Codex Notification Sounds")) {
                     let version = Bundle.main.object(
                         forInfoDictionaryKey: "CFBundleShortVersionString"
-                    ) as? String ?? "未知"
+                    ) as? String ?? L10n.text("未知", "Unknown")
                     NSApp.orderFrontStandardAboutPanel(options: [
-                        .applicationName: "Codex 提示音",
+                        .applicationName: L10n.text("Codex 提示音", "Codex Notification Sounds"),
                         .version: version,
                     ])
                 }
