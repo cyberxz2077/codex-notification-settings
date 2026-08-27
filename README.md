@@ -2,9 +2,36 @@
 
 [中文](README.md) · [English](README.en.md)
 
-一个面向 macOS 的非官方 Codex 提示音设置工具。它把 Codex 的通知分成不同状态，允许分别开关、选择系统声音和调整音量；设置 App 可以随用随开，退出后后台通知仍继续工作。
+![Latest release](https://img.shields.io/github/v/release/cyberxz2077/codex-notification-settings?display_name=tag&label=latest%20release)
+![CI](https://github.com/cyberxz2077/codex-notification-settings/actions/workflows/ci.yml/badge.svg)
+![macOS 13+](https://img.shields.io/badge/macOS-13%2B-111111)
+![License: MIT](https://img.shields.io/badge/license-MIT-2ea44f)
 
-<img src="Resources/app-icon-source.png" width="160" alt="Codex Notification Settings app icon">
+一个面向 macOS 的非官方 Codex 提示音设置工具：让你知道任务完成了、正在等待你，还是执行失败，而不必一直盯着 Codex 窗口。
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" valign="middle" width="190">
+        <img src="Resources/app-icon-source.png" width="160" alt="Codex Notification Settings App 图标">
+      </td>
+      <td align="center" valign="middle">
+        <img src="docs/codex-notification-settings-preview.png" width="720" alt="Codex Notification Settings 设置界面预览">
+      </td>
+    </tr>
+  </table>
+  <p><sub>原生 SwiftUI 设置界面 · Native SwiftUI settings UI</sub></p>
+</div>
+
+<p align="center">
+  <a href="https://github.com/cyberxz2077/codex-notification-settings/releases/tag/v1.0.2"><strong>下载 v1.0.2</strong></a> ·
+  <a href="INSTALL.md">安装说明</a> ·
+  <a href="https://github.com/cyberxz2077/codex-notification-settings/issues">反馈问题</a>
+</p>
+
+## 为什么做这个
+
+Codex 的任务经常需要等待编译、工具调用或人工确认。这个小工具把通知变成可辨认的声音，并把设置集中在一个原生 macOS 窗口里：不驻留设置窗口、不上传数据，也不要求普通用户安装 Python、Homebrew 或 Xcode。
 
 ## 功能
 
@@ -36,7 +63,7 @@
 
 ### 发布包（推荐）
 
-从 [GitHub Releases](https://github.com/cyberxz2077/codex-notification-settings/releases) 下载最新版 `Codex-Notification-Settings-<version>-macos.zip`，解压后双击 `Install.command`。详细步骤见 [INSTALL.md](INSTALL.md)。
+从 [GitHub Releases](https://github.com/cyberxz2077/codex-notification-settings/releases) 下载推荐版本 [v1.0.2](https://github.com/cyberxz2077/codex-notification-settings/releases/tag/v1.0.2) 的 `Codex-Notification-Settings-1.0.2-macos.zip`，解压后双击 `Install.command`。详细步骤见 [INSTALL.md](INSTALL.md)。
 
 ### 从源码安装
 
@@ -76,7 +103,7 @@ CODEX_NOTIFY_EXPERIMENTAL_STAGE=0 ./Scripts/install.sh
 ```bash
 make build
 make test
-./Scripts/package-release.sh 1.0.0
+./Scripts/package-release.sh 1.0.2
 ```
 
 产物位于 `dist/`。构建脚本会生成同时支持 Apple Silicon 与 Intel Mac 的 Universal 2 App，并使用直接 `swiftc` 编译，以避开部分 Swift 6 工具链在 SwiftUI release 优化阶段的编译器崩溃。Swift Package 仍用于 IDE 索引和调试构建。
@@ -98,6 +125,34 @@ make test
 - 本项目不会读取 API key、密码或环境变量文件。
 
 更完整的说明见 [隐私说明](PRIVACY.md) 和 [安全政策](SECURITY.md)。
+
+## 反馈与参与
+
+如果这个工具帮你少盯了一会儿 Codex，欢迎在 GitHub 点一个 Star，或分享你的声音配置；Star 会让其他遇到同样问题的人更容易找到它。
+
+遇到问题时，请优先附上 macOS 版本、Codex 版本、是否使用桌面客户端或 CLI，以及脱敏后的 `Doctor.command` 输出。不要上传会话记录、API key、密码或完整个人路径。
+
+- [报告 Bug](https://github.com/cyberxz2077/codex-notification-settings/issues/new?template=bug_report.yml)
+- [提出功能建议](https://github.com/cyberxz2077/codex-notification-settings/issues/new?template=feature_request.yml)
+- [参与贡献](CONTRIBUTING.md)
+
+## 常见问题
+
+### 这是 OpenAI 官方应用吗？
+
+不是。这是社区维护的开源 macOS 工具，与 OpenAI 没有隶属或背书关系。
+
+### 为什么有些状态标记为“实验性”？
+
+阶段成果和实时语音依赖 Codex 的本地 rollout JSONL 格式；网络、失败和等待输入也取决于客户端是否发出结构化事件。它们可能随 Codex 更新而需要适配。
+
+### 下载后应该打开哪个文件？
+
+普通用户只需要解压并双击 `Install.command`，安装完成后打开 `Codex Notification Settings.app`。不要直接运行安装目录或支持目录里的 `CodexNotificationEngine`，它是后台组件。
+
+## 发展方向
+
+以下方向仍是探索项，不代表已承诺的时间表：更简单的升级入口、更多 Codex 客户端兼容性测试，以及通过真实用户反馈调整默认声音和状态说明。
 
 ## 免责声明
 

@@ -1,0 +1,47 @@
+name: Bug report
+description: Report a reproducible problem with installation or notifications.
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please remove API keys, passwords, session records, and private paths before posting.
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: macOS 26.6 (Apple Silicon)
+    validations:
+      required: true
+  - type: input
+    id: codex
+    attributes:
+      label: Codex version
+      placeholder: Desktop or CLI version
+    validations:
+      required: true
+  - type: dropdown
+    id: client
+    attributes:
+      label: Codex client
+      options:
+        - Codex desktop app
+        - Codex CLI
+        - Both
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Tell us what you expected and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Redacted diagnostics
+      description: Paste the relevant, redacted output from Doctor.command if available.
+      render: text
