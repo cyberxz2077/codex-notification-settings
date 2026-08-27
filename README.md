@@ -31,7 +31,9 @@
 
 ## 为什么做这个
 
-Codex 的任务经常需要等待编译、工具调用或人工确认。这个小工具把通知变成可辨认的声音，并把设置集中在一个原生 macOS 窗口里：不驻留设置窗口、不上传数据，也不要求普通用户安装 Python、Homebrew 或 Xcode。
+Codex 的默认提示往往只能告诉你“有事情发生了”，却不能让你立刻分辨是完成、等待你，还是失败。这个小工具针对的就是“状态没有区分”的问题：为每种状态绑定不同声音和音量，让同一套 Codex 工作流听起来有清晰的层次。
+
+> 核心区别：让“阶段成果 / 最终输出 / 需要你 / 任务失败”不再听起来一样。
 
 ## 功能
 
@@ -50,6 +52,8 @@ Codex 的任务经常需要等待编译、工具调用或人工确认。这个�
 - 阶段监听器独立运行，设置 App 不需要常驻 Dock。
 - 同一任务回合会限频去重，避免重复响铃。
 - 跟随 macOS 首选语言；中文系统显示中文，其他语言默认显示英文。
+
+状态与客户端边界见 [兼容性说明](docs/COMPATIBILITY.md)。
 
 ## 系统要求
 
@@ -135,6 +139,7 @@ make test
 - [报告 Bug](https://github.com/cyberxz2077/codex-notification-settings/issues/new?template=bug_report.yml)
 - [提出功能建议](https://github.com/cyberxz2077/codex-notification-settings/issues/new?template=feature_request.yml)
 - [参与贡献](CONTRIBUTING.md)
+- [中英文分享文案](docs/COMMUNITY-POSTS.md)
 
 ## 常见问题
 

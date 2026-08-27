@@ -31,7 +31,9 @@ An unofficial macOS utility that turns Codex task states into recognizable sound
 
 ## Why this exists
 
-Codex tasks often wait on builds, tool calls, or human approval. This utility makes those moments audible in a native macOS settings window: no settings window needs to stay open, no data is uploaded, and packaged installs do not require Python, Homebrew, or Xcode.
+Codex's default cue can tell you that something happened, but not whether the task finished, needs you, or failed. This utility targets that exact gap: map each state to a different sound and volume so one Codex workflow has a clear audible hierarchy.
+
+> The key distinction: “stage update / final output / needs you / task failed” should not sound the same.
 
 ## Features
 
@@ -50,6 +52,8 @@ Codex tasks often wait on builds, tool calls, or human approval. This utility ma
 - Keep the experimental progress watcher running without leaving the settings app in the Dock.
 - Rate-limit duplicate notifications within the same task turn.
 - Follow the first macOS preferred language: Chinese for `zh` locales and English otherwise.
+
+See [Compatibility](docs/COMPATIBILITY.md) for the client and event boundaries.
 
 ## Requirements
 
@@ -135,6 +139,7 @@ When reporting a problem, include your macOS version, Codex version, whether you
 - [Report a bug](https://github.com/cyberxz2077/codex-notification-settings/issues/new?template=bug_report.yml)
 - [Request a feature](https://github.com/cyberxz2077/codex-notification-settings/issues/new?template=feature_request.yml)
 - [Contribute](CONTRIBUTING.md)
+- [Bilingual sharing copy](docs/COMMUNITY-POSTS.md)
 
 ## FAQ
 
