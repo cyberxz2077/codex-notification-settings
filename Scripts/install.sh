@@ -34,6 +34,9 @@ mkdir -p "$HOME/Applications" "$ENGINE_DIR" "$LOG_DIR" "$CODEX_HOME"
 ditto "$APP_SOURCE" "$APP_TARGET"
 
 install -m 755 "$APP_TARGET/Contents/MacOS/CodexNotificationSettings" "$ENGINE"
+# The engine is executed outside the app bundle. Re-sign the copied binary so
+# its embedded app-bundle Info.plist seal cannot invalidate launchd execution.
+codesign --force --sign - "$ENGINE" >/dev/null
 
 if [[ ! -f "$SETTINGS_FILE" ]]; then
   install -m 600 "$ROOT/Resources/notification-settings.default.json" "$SETTINGS_FILE"
