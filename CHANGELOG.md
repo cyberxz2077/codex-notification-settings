@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 - Unreleased
+## 1.0.0 - 2026-08-27
 
 - 独立的 SwiftUI 提示音设置 App。
 - 六种 Codex 状态的声音、音量与开关配置。
